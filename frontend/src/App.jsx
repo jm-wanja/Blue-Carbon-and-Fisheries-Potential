@@ -1,42 +1,15 @@
 import { useState } from "react";
-import axios from "axios";
+import CarbonForm from "./CarbonForm";
+import CarbonChart from "./CarbonChart";
+import FisheryForm from "./FisheryForm";
+import FisheryChart from "./FisheryChart";
+import ScenarioForm from "./ScenarioForm";
+import ScenarioComparisonChart from "./ScenarioComparisonChart";
 
 function App() {
-  const [activeTab, setActiveTab] = useState("carbon");
-  const [result, setResult] = useState(null);
-
-  const runCarbon = async () => {
-    const res = await axios.post("http://127.0.0.1:8000/carbon", {
-      area_ha: 100,
-      sequestration_rate: 17.7,
-      price_per_ton: 20,
-    });
-    setResult(res.data);
-    setActiveTab("carbon");
-  };
-
-  const runFishery = async () => {
-    const res = await axios.post("http://127.0.0.1:8000/fishery", {
-      area_ha: 100,
-      baseline_income_per_ha: 249,
-      change_in_area: 10,
-    });
-    setResult(res.data);
-    setActiveTab("fishery");
-  };
-
-  const runScenario = async () => {
-    const res = await axios.post("http://127.0.0.1:8000/scenario", {
-      area_ha: 100,
-      sequestration_rate: 17.7,
-      price_per_ton: 20,
-      baseline_income_per_ha: 249,
-      restoration_area: 10,
-      degradation_rate: 0.02,
-    });
-    setResult(res.data);
-    setActiveTab("scenario");
-  };
+  const [carbonResult, setCarbonResult] = useState(null);
+  const [fisheryResult, setFisheryResult] = useState(null);
+  const [scenarioResult, setScenarioResult] = useState(null);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -44,46 +17,32 @@ function App() {
         🌍 Blue Carbon & Fisheries Dashboard
       </h1>
 
-      {/* Tabs */}
-      <div className="flex space-x-4 mb-6">
-        <button
-          onClick={runCarbon}
-          className={`px-4 py-2 rounded ${
-            activeTab === "carbon" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
-        >
-          Carbon Credits
-        </button>
-        <button
-          onClick={runFishery}
-          className={`px-4 py-2 rounded ${
-            activeTab === "fishery" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
-        >
-          Fishery Impact
-        </button>
-        <button
-          onClick={runScenario}
-          className={`px-4 py-2 rounded ${
-            activeTab === "scenario" ? "bg-blue-600 text-white" : "bg-gray-200"
-          }`}
-        >
-          Scenario Comparison
-        </button>
-      </div>
+      {/* Carbon Section */}
+      <CarbonForm onResult={setCarbonResult} />
+      {carbonResult && (
+        <div className="mt-6 bg-white p-6 rounded shadow">
+          <h3 className="text-lg font-semibold mb-4">Carbon Results</h3>
+          <CarbonChart data={carbonResult} />
+        </div>
+      )}
 
-      {/* Results */}
-      <div className="bg-white p-6 rounded shadow">
-        {result ? (
-          <pre className="whitespace-pre-wrap text-sm">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        ) : (
-          <p className="text-gray-600">
-            Select a tab to fetch results from the backend.
-          </p>
-        )}
-      </div>
+      {/* Fishery Section */}
+      <FisheryForm onResult={setFisheryResult} />
+      {fisheryResult && (
+        <div className="mt-6 bg-white p-6 rounded shadow">
+          <h3 className="text-lg font-semibold mb-4">Fishery Results</h3>
+          <FisheryChart data={fisheryResult} />
+        </div>
+      )}
+
+      {/* Scenario Section */}
+      <ScenarioForm onResult={setScenarioResult} />
+      {scenarioResult && (
+        <div className="mt-6 bg-white p-6 rounded shadow">
+          <h3 className="text-lg font-semibold mb-4">Scenario Comparison</h3>
+          <ScenarioComparisonChart data={scenarioResult} />
+        </div>
+      )}
     </div>
   );
 }

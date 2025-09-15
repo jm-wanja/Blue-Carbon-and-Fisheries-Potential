@@ -1,0 +1,37 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Kwale Mangroves" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [39.35, -4.45],
+            [39.65, -4.45],
+            [39.65, -4.05],
+            [39.35, -4.05],
+            [39.35, -4.45]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lamu Mangroves" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [40.75, -2.50],
+            [41.05, -2.50],
+            [41.05, -2.10],
+            [40.75, -2.10],
+            [40.75, -2.50]
+          ]
+        ]
+      }
+    }
+  ]
+}
