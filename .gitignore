@@ -1,5 +1,6 @@
-# Exclude notes and documentation drafts
+# Exclude development files and documentation drafts
 notes/
+WARP.md
 *.pptx
 *.pdf
 
