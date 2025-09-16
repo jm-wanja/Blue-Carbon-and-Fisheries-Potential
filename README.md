@@ -17,7 +17,8 @@ This MVP demonstrates the economic benefits of mangrove conservation by:
 Blue-Carbon-and-Fisheries-Potential/
 ├── backend/          # FastAPI REST API
 ├── frontend/         # React + Vite web application
-├── notes/            # Research and development notes
+├── docker-compose.yml # Docker orchestration
+├── Makefile          # Development commands
 ```
 
 ### Backend (FastAPI)
@@ -40,8 +41,9 @@ Blue-Carbon-and-Fisheries-Potential/
 ### Prerequisites
 
 * Python 3.8+
-* Node.js 18+
+* Node.js 20+
 * npm or yarn
+* Docker (optional, for containerized deployment)
 
 ### Backend Setup
 
@@ -69,6 +71,26 @@ npm run dev
 Web app available at:
 
 * **Local**: [http://localhost:5173](http://localhost:5173)
+
+### Docker Setup (Recommended)
+
+```bash
+# Quick start with one command
+make quick-start
+
+# Or step by step
+make install           # Install dependencies
+make docker-build      # Build Docker images  
+make docker-up-detached # Start all services
+make status            # Check service status
+```
+
+Services available at:
+* **Frontend**: [http://localhost:5173](http://localhost:5173)
+* **Backend**: [http://localhost:8000](http://localhost:8000)
+* **API Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+See [DOCKER.md](./DOCKER.md) for complete Docker documentation.
 
 ## 📈 Data Sources & Research Basis
 
@@ -105,30 +127,50 @@ Compare BAU, Conservation, and Restoration scenarios.
 
 ## 📦 Build & Deployment
 
-### Frontend
+### Development
 
 ```bash
-cd frontend
-npm run build
+# Run locally without Docker
+make dev              # Both frontend and backend
+make backend          # Backend only
+make frontend         # Frontend only
+
+# Run with Docker
+make docker-up        # Foreground mode
+make docker-up-detached # Background mode
+make docker-down      # Stop services
 ```
 
-### Backend
+### Production Build
 
-For production:
+```bash
+# Build frontend for production
+make build
 
-* Use Gunicorn/Uvicorn workers
-* Add env variable configuration
+# Build and deploy with Docker
+make docker-build
+make docker-up-detached
+```
+
+### Production Considerations
+
+* Use Gunicorn/Uvicorn workers for FastAPI
+* Add environment variable configuration
 * Enable logging & monitoring
-* Integrate database (Postgres + PostGIS)
+* Integrate database (PostgreSQL + PostGIS)
+* Add SSL/TLS termination
+* Set up container orchestration (Kubernetes/Docker Swarm)
 
 ## 🛣️ Roadmap
 
 ### Phase 1: Core MVP ✅
 
-* [x] FastAPI backend
-* [x] React frontend with forms
-* [x] Scenario comparison
-* [x] Interactive charts
+* [x] FastAPI backend with economic calculations
+* [x] React frontend with interactive forms
+* [x] Scenario comparison (BAU vs Conservation vs Restoration)
+* [x] Interactive charts and data visualization
+* [x] Docker containerization and orchestration
+* [x] Make-based development workflow
 
 ### Phase 2: Enhanced Features
 

@@ -1,50 +1,47 @@
-import { useState } from "react";
-import CarbonForm from "./CarbonForm";
-import CarbonChart from "./CarbonChart";
-import FisheryForm from "./FisheryForm";
-import FisheryChart from "./FisheryChart";
-import ScenarioForm from "./ScenarioForm";
-import ScenarioComparisonChart from "./ScenarioComparisonChart";
+import { useState } from 'react';
+import DashboardLayout from './DashboardLayout';
+import CarbonForm from './CarbonForm';
+import CarbonChart from './CarbonChart';
+import FisheryForm from './FisheryForm';
+import FisheryChart from './FisheryChart';
+import ScenarioForm from './ScenarioForm';
+import ScenarioComparisonChart from './ScenarioComparisonChart';
+import ScenarioTab from './ScenarioTab';
+import MangroveMap from './MangroveMap';
 
 function App() {
-  const [carbonResult, setCarbonResult] = useState(null);
-  const [fisheryResult, setFisheryResult] = useState(null);
-  const [scenarioResult, setScenarioResult] = useState(null);
+  const [carbonData, setCarbonData] = useState(null);
+  const [fisheryData, setFisheryData] = useState(null);
+  const [scenarioData, setScenarioData] = useState(null);
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-3xl font-bold mb-6">
-        🌍 Blue Carbon & Fisheries Dashboard
-      </h1>
-
-      {/* Carbon Section */}
-      <CarbonForm onResult={setCarbonResult} />
-      {carbonResult && (
-        <div className="mt-6 bg-white p-6 rounded shadow">
-          <h3 className="text-lg font-semibold mb-4">Carbon Results</h3>
-          <CarbonChart data={carbonResult} />
+  const tabs = {
+    Carbon: (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="col-span-1">
+          <CarbonForm onResult={setCarbonData} />
         </div>
-      )}
-
-      {/* Fishery Section */}
-      <FisheryForm onResult={setFisheryResult} />
-      {fisheryResult && (
-        <div className="mt-6 bg-white p-6 rounded shadow">
-          <h3 className="text-lg font-semibold mb-4">Fishery Results</h3>
-          <FisheryChart data={fisheryResult} />
+        <div className="col-span-2">{carbonData && <CarbonChart data={carbonData} />}</div>
+      </div>
+    ),
+    Fishery: (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="col-span-1">
+          <FisheryForm onResult={setFisheryData} />
         </div>
-      )}
+        <div className="col-span-2">{fisheryData && <FisheryChart data={fisheryData} />}</div>
+      </div>
+    ),
+    Scenario: (
+      <ScenarioTab
+        form={<ScenarioForm onResult={setScenarioData} />}
+        data={scenarioData}
+        chart={scenarioData && <ScenarioComparisonChart data={scenarioData} />}
+      />
+    ),
+    Map: <MangroveMap />,
+  };
 
-      {/* Scenario Section */}
-      <ScenarioForm onResult={setScenarioResult} />
-      {scenarioResult && (
-        <div className="mt-6 bg-white p-6 rounded shadow">
-          <h3 className="text-lg font-semibold mb-4">Scenario Comparison</h3>
-          <ScenarioComparisonChart data={scenarioResult} />
-        </div>
-      )}
-    </div>
-  );
+  return <DashboardLayout tabs={tabs} />;
 }
 
 export default App;
